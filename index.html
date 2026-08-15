@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Perencanaan Pembelajaran Mendalam</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #f3f4f6;
+      color: #333;
+    }
+    .app-container {
+      display: flex;
+      gap: 20px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+    .form-section, .preview-section {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .form-section {
+      flex: 1;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .preview-section {
+      flex: 1.8;
+      background: #fafafa;
+    }
+    .form-section h2 {
+      margin-top: 0;
+      color: #1e3a8a;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 8px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .checkbox-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      border-radius: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+    .checkbox-item span {
+      line-height: 1.4;
+    }
+    button.btn-generate {
+      width: 100%;
+      padding: 12px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 10px;
+    }
+    button.btn-generate:hover {
+      background-color: #1d4ed8;
+    }
+    button.btn-print {
+      padding: 10px 20px;
+      background-color: #059669;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 15px;
+      float: right;
+    }
+    button.btn-print:hover {
+      background-color: #047857;
+    }
+
+    /* Format Dokumen Hasil Generate (Font Times New Roman 12pt) */
+    .document-paper {
+      background: white;
+      padding: 40px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      line-height: 1.5;
+      clear: both;
+      font-family: 'Times New Roman', Times, serif !important;
+      font-size: 12pt !important;
+    }
+    .document-paper * {
+      font-family: 'Times New Roman', Times, serif !important;
+    }
+    .doc-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 14pt;
+      margin-bottom: 25px;
+      text-decoration: underline;
+    }
+    .meta-table {
+      width: 100%;
+      margin-bottom: 20px;
+      border-collapse: collapse;
+      font-size: 12pt;
+    }
+    .meta-table td {
+      padding: 4px 8px;
+      vertical-align: top;
+    }
+    .meta-table td:first-child {
+      white-space: nowrap;
+      width: 1%;
+      font-weight: bold;
+      padding-right: 15px;
+    }
+    
+    /* Header Sub-Bagian dengan Kotak Biru Muda */
+    .section-header {
+      font-weight: bold;
+      background-color: #e0f2fe;
+      color: #0369a1;
+      padding: 8px 12px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      border-left: 5px solid #0284c7;
+      border-radius: 4px;
+      font-size: 12pt;
+    }
+    
+    .content-block {
+      padding: 5px 10px 10px 10px;
+      font-size: 12pt;
+    }
+    
+    /* Format DPL Sejajar Lurus Titik Dua (:) */
+    .dpl-container {
+      display: table;
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+    .dpl-row {
+      display: table-row;
+    }
+    .dpl-bullet {
+      display: table-cell;
+      width: 20px;
+      vertical-align: top;
+      padding-bottom: 4px;
+    }
+    .dpl-title {
+      display: table-cell;
+      white-space: nowrap;
+      font-weight: bold;
+      padding-right: 5px;
+      vertical-align: top;
+      padding-bottom: 4px;
+    }
+    .dpl-colon {
+      display: table-cell;
+      width: 15px;
+      text-align: center;
+      vertical-align: top;
+      padding-bottom: 4px;
+    }
+    .dpl-desc {
+      display: table-cell;
+      vertical-align: top;
+      padding-bottom: 4px;
+    }
+
+    /* Format Desain Pembelajaran (DP) Sejajar Lurus Titik Dua (:) */
+    .dp-container {
+      display: table;
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    .dp-row {
+      display: table-row;
+    }
+    .dp-title {
+      display: table-cell;
+      white-space: nowrap;
+      font-weight: bold;
+      padding-right: 5px;
+      vertical-align: top;
+      padding-bottom: 8px;
+      width: 1%;
+    }
+    .dp-colon {
+      display: table-cell;
+      width: 20px;
+      text-align: center;
+      vertical-align: top;
+      padding-bottom: 8px;
+      font-weight: bold;
+    }
+    .dp-desc {
+      display: table-cell;
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+    ul, ol {
+      margin: 5px 0;
+      padding-left: 20px;
+    }
+    .list-inti {
+      list-style-type: lower-alpha;
+      margin: 5px 0 15px 20px;
+      padding-left: 0;
+    }
+
+    /* Format Tabel Rubrik Asesmen */
+    .rubric-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      font-size: 11pt;
+    }
+    .rubric-table th, .rubric-table td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      vertical-align: top;
+    }
+    .rubric-table th {
+      background-color: #f1f5f9;
+      font-weight: bold;
+    }
+    .rubric-table th.th-center {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .rubric-table td {
+      text-align: left;
+    }
+
+    /* Styling Tabel Tanda Tangan Presisi, Lurus, & Sejajar */
+    .signature-table {
+      width: 100%;
+      margin-top: 40px;
+      border-collapse: collapse;
+      page-break-inside: avoid;
+      font-size: 12pt;
+    }
+    .signature-table td {
+      width: 50%;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .sig-left {
+      text-align: left;
+      padding-left: 10px;
+    }
+    .sig-right {
+      text-align: left;
+      padding-left: 80px;
+    }
+    .signature-space {
+      height: 75px;
+    }
+
+    /* Format Khusus Mode Cetak */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .form-section, .btn-print, h2 {
+        display: none !important;
+      }
+      .app-container {
+        display: block;
+      }
+      .preview-section {
+        box-shadow: none;
+        padding: 0;
+        background: white;
+      }
+      .document-paper {
+        border: none;
+        padding: 0;
+        box-shadow: none;
+      }
+      .section-header {
+        background-color: #e0f2fe !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- FORM INPUT -->
+  <div class="form-section">
+    <h2>Form Input RPP</h2>
+    
+    <div class="form-group">
+      <label>Sekolah</label>
+      <input type="text" id="sekolah" placeholder="Contoh: SMP Negeri 1 Jakarta">
+    </div>
+
+    <div class="form-group">
+      <label>Nama Guru</label>
+      <input type="text" id="namaGuru" placeholder="Nama Lengkap & Gelar">
+    </div>
+
+    <div class="form-group">
+      <label>NIP Guru</label>
+      <input type="text" id="nipGuru" placeholder="Contoh: 19850101 201001 1 001">
+    </div>
+
+    <div class="form-group">
+      <label>Nama Kepala Sekolah</label>
+      <input type="text" id="namaKepsek" placeholder="Nama Lengkap & Gelar">
+    </div>
+
+    <div class="form-group">
+      <label>NIP Kepala Sekolah</label>
+      <input type="text" id="nipKepsek" placeholder="Contoh: 19750101 199803 1 002">
+    </div>
+
+    <div class="form-group">
+      <label>Tempat, Tanggal Dokumen</label>
+      <input type="text" id="tempatTanggal" placeholder="Contoh: Jakarta, 15 Agustus 2026">
+    </div>
+
+    <div class="form-group">
+      <label>Mata Pelajaran</label>
+      <input type="text" id="mapel" value="IPS" placeholder="Contoh: IPS, IPA">
+    </div>
+
+    <div class="form-group">
+      <label>Kelas</label>
+      <select id="kelas">
+        <option value="8 A">8 A</option>
+        <option value="8 B">8 B</option>
+        <option value="8 C">8 C</option>
+        <option value="8 D">8 D</option>
+        <option value="9 A">9 A</option>
+        <option value="9 B">9 B</option>
+        <option value="9 C">9 C</option>
+        <option value="9 D">9 D</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Tahun Pelajaran & Semester</label>
+      <select id="tapelSem">
+        <option value="2026 - 2027 / Semester 1 (Ganjil)">2026 - 2027 / Semester 1 (Ganjil)</option>
+        <option value="2026 - 2027 / Semester 2 (Genap)">2026 - 2027 / Semester 2 (Genap)</option>
+        <option value="2027 - 2028 / Semester 1 (Ganjil)">2027 - 2028 / Semester 1 (Ganjil)</option>
+        <option value="2027 - 2028 / Semester 2 (Genap)">2027 - 2028 / Semester 2 (Genap)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Alokasi Waktu</label>
+      <input type="text" id="alokasiWaktu" placeholder="Contoh: 2 x 40 Menit (1 Pertemuan)">
+    </div>
+
+    <!-- 8 PILIHAN DPL -->
+    <div class="form-group">
+      <label>Pilih Dimensi Profil Lulusan (DPL):</label>
+      <div class="checkbox-group" id="dplCheckboxGroup">
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl1" value="Keimanan dan Ketaqwaan terhadap Tuhan YME: Membentuk fondasi spiritual dan akhlak mulia." checked>
+          <span><strong>Keimanan dan Ketaqwaan terhadap Tuhan YME:</strong> Membentuk fondasi spiritual dan akhlak mulia.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl2" value="Kewargaan: Menumbuhkan kesadaran bela negara, kepedulian sosial, dan tanggung jawab sebagai warga." checked>
+          <span><strong>Kewargaan:</strong> Menumbuhkan kesadaran bela negara, kepedulian sosial, dan tanggung jawab sebagai warga.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl3" value="Penalaran Kritis: Melatih kemampuan menganalisis informasi secara logis dan sistematis." checked>
+          <span><strong>Penalaran Kritis:</strong> Melatih kemampuan menganalisis informasi secara logis dan sistematis.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl4" value="Kreativitas: Mengembangkan daya cipta untuk menghasilkan solusi orisinal." checked>
+          <span><strong>Kreativitas:</strong> Mengembangkan daya cipta untuk menghasilkan solusi orisinal.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl5" value="Kolaborasi: Menguatkan kemampuan bekerja sama dan bergotong royong." checked>
+          <span><strong>Kolaborasi:</strong> Menguatkan kemampuan bekerja sama dan bergotong royong.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl6" value="Kemandirian: Membangun kedisiplinan dan tanggung jawab belajar secara mandiri." checked>
+          <span><strong>Kemandirian:</strong> Membangun kedisiplinan dan tanggung jawab belajar secara mandiri.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl7" value="Kebinekaan Global: Menghargai keberagaman budaya serta memiliki wawasan global." checked>
+          <span><strong>Kebinekaan Global:</strong> Menghargai keberagaman budaya serta memiliki wawasan global.</span>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="dpl8" value="Komunikasi: Mampu menyampaikan gagasan secara efektif, santun, dan responsif." checked>
+          <span><strong>Komunikasi:</strong> Mampu menyampaikan gagasan secara efektif, santun, dan responsif.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Capaian Pembelajaran (CP) / Topik Utamanya</label>
+      <textarea id="cpInput" placeholder="Masukkan CP atau topik singkat untuk dasar auto-generate (Opsional)"></textarea>
+    </div>
+
+    <button class="btn-generate" onclick="generateRPP()">Generate Perencanaan</button>
+  </div>
+
+  <!-- HASIL PREVIEW DOKUMEN -->
+  <div class="preview-section">
+    <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
+    <div style="clear: both;"></div>
+
+    <div class="document-paper" id="documentPaper">
+      <div class="doc-title">PERENCANAAN PEMBELAJARAN MENDALAM</div>
+      
+      <table class="meta-table">
+        <tr>
+          <td>SEKOLAH</td>
+          <td>: <span id="outSekolah">[Nama Sekolah]</span></td>
+        </tr>
+        <tr>
+          <td>NAMA GURU</td>
+          <td>: <span id="outNamaGuru">[Nama Guru]</span></td>
+        </tr>
+        <tr>
+          <td>MATA PELAJARAN</td>
+          <td>: <span id="outMapel">IPS</span></td>
+        </tr>
+        <tr>
+          <td>KELAS</td>
+          <td>: <span id="outKelas">8 A</span></td>
+        </tr>
+        <tr>
+          <td>TAHUN PELAJARAN / SEMESTER</td>
+          <td>: <span id="outTapelSem">2026 - 2027 / Semester 1 (Ganjil)</span></td>
+        </tr>
+        <tr>
+          <td>ALOKASI WAKTU</td>
+          <td>: <span id="outAlokasiWaktu">[Alokasi Waktu]</span></td>
+        </tr>
+      </table>
+
+      <!-- IDENTITAS -->
+      <div class="section-header">IDENTITAS</div>
+      <div class="content-block">
+        <strong>Dimensi Profil Lulusan (DPL):</strong>
+        <div class="dpl-container" id="outDpl">
+          <div style="padding-left: 10px;"><em>Klik 'Generate Perencanaan' untuk menampilkan DPL yang dipilih...</em></div>
+        </div>
+      </div>
+
+      <!-- DESAIN PEMBELAJARAN (TITIK DUA DIBUAT SEJAJAR LURUS) -->
+      <div class="section-header">DESAIN PEMBELAJARAN</div>
+      <div class="content-block">
+        <div class="dp-container">
+          <div class="dp-row">
+            <div class="dp-title">Tujuan Pembelajaran (TP)</div>
+            <div class="dp-colon">:</div>
+            <div class="dp-desc" id="outTp">-</div>
+          </div>
+          <div class="dp-row">
+            <div class="dp-title">Praktik Pedagogis</div>
+            <div class="dp-colon">:</div>
+            <div class="dp-desc" id="outPedagogis">-</div>
+          </div>
+          <div class="dp-row">
+            <div class="dp-title">Lingkungan Pembelajaran</div>
+            <div class="dp-colon">:</div>
+            <div class="dp-desc" id="outLingkungan">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENGALAMAN BELAJAR -->
+      <div class="section-header">PENGALAMAN BELAJAR</div>
+      <div class="content-block">
+        <p><strong>A. Awal</strong></p>
+        <div id="outPengalamanAwal">-</div>
+
+        <p><strong>B. Inti</strong></p>
+        <div id="outPengalamanIntiDetail">
+          <strong>1. Memahami (Berkesadaran)</strong>
+          <ol class="list-inti">
+            <li>Peserta didik secara berkesadaran mengamati tayangan/bahan bacaan studi kasus kontekstual terkait <span class="mapel-text">IPS</span>.</li>
+            <li>Peserta didik dengan nalar kritis mengidentifikasi masalah utama dan merumuskan pertanyaan kunci secara individu maupun kelompok.</li>
+            <li>Guru memberikan <em>scaffolding</em> berupa bimbingan pertanyaan terarah untuk memperdalam pemahaman konsep awal.</li>
+          </ol>
+
+          <strong>2. Mengaplikasi (Berkesadaran dan Bermakna)</strong>
+          <ol class="list-inti">
+            <li>Peserta didik membentuk kelompok kolaboratif untuk merancang solusi kontekstual atas permasalahan <span class="mapel-text">IPS</span> yang diangkat.</li>
+            <li>Setiap kelompok menyusun karya (dapat berupa infografis, poster, laporan ringkas, atau tayangan digital) secara bermakna dan mandiri.</li>
+            <li>Peserta didik mengomunikasikan hasil kerja melalui sesi <em>Gallery Walk</em> atau presentasi interaktif, serta saling memberikan tanggapan.</li>
+          </ol>
+
+          <strong>3. Merefleksi (Berkesadaran, Bermakna dan Menggembirakan)</strong>
+          <ol class="list-inti">
+            <li>Peserta didik bersama guru melakukan refleksi mendalam mengenai konsep penting <span class="mapel-text">IPS</span> yang telah dipahami.</li>
+            <li>Peserta didik mengidentifikasi tantangan atau kesulitan yang dihadapi selama proses kerja kelompok serta bagaimana cara mengatasinya.</li>
+            <li>Pembelajaran ditutup dengan kegiatan apresiasi (<em>fun feedback/emoji refleksi</em>) untuk menciptakan perasaan gembira dan berkesan.</li>
+          </ol>
+        </div>
+
+        <p><strong>C. Penutup</strong></p>
+        <div id="outPengalamanPenutup">-</div>
+      </div>
+
+      <!-- ASESMEN PEMBELAJARAN LENGKAP & RUBRIK -->
+      <div class="section-header">ASESMEN PEMBELAJARAN & RUBRIK EVALUASI</div>
+      <div class="content-block">
+        
+        <!-- 1. RUBRIK ASESMEN AWAL -->
+        <p><strong>1. Rubrik Asesmen Pembelajaran Awal (Diagnostik / Kesiapan Belajar)</strong></p>
+        <table class="rubric-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;" class="th-center">Aspek Penilaian</th>
+              <th style="width: 20%;" class="th-center">Perlu Bimbingan<br>(1)</th>
+              <th style="width: 20%;" class="th-center">Cukup<br>(2)</th>
+              <th style="width: 20%;" class="th-center">Baik<br>(3)</th>
+              <th style="width: 20%;" class="th-center">Sangat Baik<br>(4)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Pemahaman Prasyarat</strong></td>
+              <td>Belum mampu menjawab pertanyaan dasar materi prasyarat.</td>
+              <td>Mampu menjawab sebagian materi prasyarat dengan bantuan guru.</td>
+              <td>Mampu menjawab materi prasyarat secara mandiri dan benar.</td>
+              <td>Mampu mengaitkan materi prasyarat dengan analisis konteks baru.</td>
+            </tr>
+            <tr>
+              <td><strong>Kesiapan & Kesadaran Belajar</strong></td>
+              <td>Pasif dan membutuhkan dorongan penuh untuk memulai pembelajaran.</td>
+              <td>Menunjukkan kesiapan tetapi masih ragu menyampaikan ide awal.</td>
+              <td>Aktif dan siap mengikuti alur pembelajaran dengan baik.</td>
+              <td>Sangat antusias, fokus penuh, dan menginspirasi teman sekelas.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 2. RUBRIK ASESMEN PROSES -->
+        <p><strong>2. Rubrik Asesmen Pada Proses Pembelajaran (Formatif / Kinerja Diskusi & Proyek)</strong></p>
+        <table class="rubric-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;" class="th-center">Aspek Penilaian</th>
+              <th style="width: 20%;" class="th-center">Perlu Bimbingan<br>(1)</th>
+              <th style="width: 20%;" class="th-center">Cukup<br>(2)</th>
+              <th style="width: 20%;" class="th-center">Baik<br>(3)</th>
+              <th style="width: 20%;" class="th-center">Sangat Baik<br>(4)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kolaborasi & Gotong Royong</strong></td>
+              <td>Cenderung pasif atau bekerja sendiri dalam kelompok.</td>
+              <td>Ikut serta jika diminta oleh rekan satu kelompok.</td>
+              <td>Aktif berdiskusi dan menjalankan peran kelompok dengan baik.</td>
+              <td>Menjadi inisiator, proaktif membantu rekan, dan menghargai ide.</td>
+            </tr>
+            <tr>
+              <td><strong>Penalaran Kritis (Analisis Masalah)</strong></td>
+              <td>Kesulitan mengidentifikasi permasalahan pada LKPD/studi kasus.</td>
+              <td>Mampu menemukan masalah tetapi alur solusi kurang sistematis.</td>
+              <td>Mampu menganalisis masalah dan memberikan argumentasi logis.</td>
+              <td>Kritis, solutif, dan menyusun sintesis masalah secara komprehensif.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 3. RUBRIK ASESMEN AKHIR -->
+        <p><strong>3. Rubrik Asesmen Pada Akhir Pembelajaran (Sumatif / Produk & Refleksi)</strong></p>
+        <table class="rubric-table">
+          <thead>
+            <tr>
+              <th style="width: 20%;" class="th-center">Aspek Penilaian</th>
+              <th style="width: 20%;" class="th-center">Perlu Bimbingan<br>(1)</th>
+              <th style="width: 20%;" class="th-center">Cukup<br>(2)</th>
+              <th style="width: 20%;" class="th-center">Baik<br>(3)</th>
+              <th style="width: 20%;" class="th-center">Sangat Baik<br>(4)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kualitas Produk / Pemahaman Akhir</strong></td>
+              <td>Hasil karya/tes tidak sesuai indikator ketercapaian TP.</td>
+              <td>Hasil karya/tes memenuhi standar minimal ketercapaian.</td>
+              <td>Hasil karya/tes runtut, tepat, dan sesuai indikator TP.</td>
+              <td>Hasil karya inovatif, sangat akurat, orisinal, dan melebihi ekspektasi.</td>
+            </tr>
+            <tr>
+              <td><strong>Komunikasi & Kemampuan Refleksi</strong></td>
+              <td>Kesulitan menyampaikan hasil pemikiran dan tidak bermakna.</td>
+              <td>Penyampaian cukup jelas, refleksi sederhana tentang pembelajaran.</td>
+              <td>Menyampaikan gagasan dengan sistematis, lugas, dan bermakna.</td>
+              <td>Komunikasi sangat persuasif, reflektif, mendalam, dan santun.</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- BAGIAN TANDA TANGAN LURUS SEJAJAR PRESISI -->
+      <table class="signature-table">
+        <tr>
+          <!-- BARIS 1: JABATAN & KOTA TANGGAL -->
+          <td class="sig-left">
+            Mengetahui,<br>
+            Kepala <span id="outSekolahTtd">[Nama Sekolah]</span>
+          </td>
+          <td class="sig-right">
+            <span id="outTempatTanggal">[Tempat, Tanggal]</span><br>
+            Guru Pengajar <span id="outMapelTtd">IPS</span>
+          </td>
+        </tr>
+        <tr>
+          <!-- BARIS 2: RUANG KOSONG TTD -->
+          <td class="signature-space"></td>
+          <td class="signature-space"></td>
+        </tr>
+        <tr>
+          <!-- BARIS 3: NAMA DAN NIP SEJAJAR LURUS -->
+          <td class="sig-left">
+            <strong><span id="outNamaKepsek">[Nama Kepala Sekolah]</span></strong><br>
+            NIP. <span id="outNipKepsek">[NIP Kepala Sekolah]</span>
+          </td>
+          <td class="sig-right">
+            <strong><span id="outNamaGuruTtd">[Nama Guru]</span></strong><br>
+            NIP. <span id="outNipGuru">[NIP Guru]</span>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function generateRPP() {
+    // 1. Ambil nilai input manual
+    const sekolah = document.getElementById('sekolah').value || '[Nama Sekolah]';
+    const namaGuru = document.getElementById('namaGuru').value || '[Nama Guru]';
+    const nipGuru = document.getElementById('nipGuru').value || '................................';
+    const namaKepsek = document.getElementById('namaKepsek').value || '[Nama Kepala Sekolah]';
+    const nipKepsek = document.getElementById('nipKepsek').value || '................................';
+    const tempatTanggal = document.getElementById('tempatTanggal').value || '[Tempat, Tanggal]';
+    const mapel = document.getElementById('mapel').value || 'IPS';
+    const kelas = document.getElementById('kelas').value;
+    const tapelSem = document.getElementById('tapelSem').value;
+    const alokasiWaktu = document.getElementById('alokasiWaktu').value || '[Alokasi Waktu]';
+    const cpInput = document.getElementById('cpInput').value || 'Menganalisis dan menerapkan konsep dasar materi';
+
+    // 2. Tampilkan Metadata Dokumen
+    document.getElementById('outSekolah').innerText = sekolah;
+    document.getElementById('outNamaGuru').innerText = namaGuru;
+    document.getElementById('outMapel').innerText = mapel;
+    document.getElementById('outKelas').innerText = kelas;
+    document.getElementById('outTapelSem').innerText = tapelSem;
+    document.getElementById('outAlokasiWaktu').innerText = alokasiWaktu;
+
+    // Tampilkan pada Tanda Tangan
+    document.getElementById('outSekolahTtd').innerText = sekolah;
+    document.getElementById('outNamaKepsek').innerText = namaKepsek;
+    document.getElementById('outNipKepsek').innerText = nipKepsek;
+    document.getElementById('outTempatTanggal').innerText = tempatTanggal;
+    document.getElementById('outMapelTtd').innerText = mapel;
+    document.getElementById('outNamaGuruTtd').innerText = namaGuru;
+    document.getElementById('outNipGuru').innerText = nipGuru;
+
+    // Update teks Mapel secara otomatis pada bagian Inti
+    const mapelElements = document.querySelectorAll('.mapel-text');
+    mapelElements.forEach(el => el.innerText = mapel);
+
+    // 3. Generate Checkbox Dimensi Profil Lulusan (DPL) - Format Tabel Sejajar Titik Dua (:)
+    const checkboxes = document.querySelectorAll('#dplCheckboxGroup input[type="checkbox"]:checked');
+    let dplHtml = "";
+    if (checkboxes.length === 0) {
+      dplHtml = `<div style="padding-left:10px;"><em>(Tidak ada DPL yang dipilih)</em></div>`;
+    } else {
+      checkboxes.forEach(cb => {
+        const parts = cb.value.split(': ');
+        dplHtml += `
+          <div class="dpl-row">
+            <div class="dpl-bullet">•</div>
+            <div class="dpl-title">${parts[0]}</div>
+            <div class="dpl-colon">:</div>
+            <div class="dpl-desc">${parts[1]}</div>
+          </div>
+        `;
+      });
+    }
+    document.getElementById('outDpl').innerHTML = dplHtml;
+
+    // 4. Generate Desain & Pengalaman Belajar
+    document.getElementById('outTp').innerText = `Melalui pendekatan pembelajaran mendalam, peserta didik mampu ${cpInput.toLowerCase()} pada mata pelajaran ${mapel} dengan menunjukkan sikap kolaboratif, bernalar kritis, dan pemahaman yang bermakna.`;
+    
+    document.getElementById('outPedagogis').innerText = `Model Pembelajaran Berbasis Masalah (Problem-Based Learning) & Inquiry-Based Learning, dikombinasikan dengan teknik scaffolding, diskusi kelompok, dan presentasi interaktif.`;
+    
+    document.getElementById('outLingkungan').innerText = `Ruang kelas yang fleksibel, aman, dan inklusif. Memanfaatkan pojok baca, media digital (interaktif), serta lingkungan fisik sekolah sebagai sumber belajar nyata.`;
+
+    document.getElementById('outPengalamanAwal').innerText = `Guru membuka pembelajaran dengan salam, kesadaran penuh (mindfulness breve), melakukan apersepsi interaktif berupa kuis cepat/pertanyaan pemantik terkait topik ${mapel}, serta menjelaskan tujuan pembelajaran dan profil keberhasilan yang akan dicapai.`;
+    
+    document.getElementById('outPengalamanPenutup').innerText = `Guru dan peserta didik membuat rangkuman poin-poin penting pembelajaran, memberikan umpan balik penguatan, melakukan penilaian refleksi diri singkat, menginformasikan materi untuk pertemuan berikutnya, dan mengakhiri kegiatan dengan doa bersama.`;
+  }
+</script>
+
+</body>
+</html>
