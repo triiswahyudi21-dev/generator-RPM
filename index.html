@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generator Perencanaan Pembelajaran Mendalam</title>
+  <title>Generator Perencanaan Pembelajaran Mendalam (RPM)</title>
   <style>
     * {
       box-sizing: border-box;
@@ -61,7 +61,7 @@
     }
     textarea {
       resize: vertical;
-      min-height: 80px;
+      min-height: 90px;
     }
     .checkbox-group {
       background: #f8fafc;
@@ -252,6 +252,9 @@
       margin: 5px 0 15px 20px;
       padding-left: 0;
     }
+    .list-inti li {
+      margin-bottom: 4px;
+    }
 
     /* Format Tabel Rubrik Asesmen */
     .rubric-table {
@@ -273,9 +276,6 @@
     .rubric-table th.th-center {
       text-align: center;
       vertical-align: middle;
-    }
-    .rubric-table td {
-      text-align: left;
     }
 
     /* Styling Tabel Tanda Tangan Presisi, Lurus, & Sejajar */
@@ -338,8 +338,22 @@
 <div class="app-container">
   <!-- FORM INPUT -->
   <div class="form-section">
-    <h2>Form Input RPP</h2>
+    <h2>Form Input RPM</h2>
     
+    <div class="form-group">
+      <label>Pilih Kelas (Penyimpanan Per Kelas)</label>
+      <select id="kelas" onchange="gantiKelasData()">
+        <option value="8 A">8 A</option>
+        <option value="8 B">8 B</option>
+        <option value="8 C">8 C</option>
+        <option value="8 D">8 D</option>
+        <option value="9 A" selected>9 A</option>
+        <option value="9 B">9 B</option>
+        <option value="9 C">9 C</option>
+        <option value="9 D">9 D</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label>Sekolah</label>
       <input type="text" id="sekolah" placeholder="Contoh: SMP Negeri 1 Jakarta">
@@ -373,20 +387,6 @@
     <div class="form-group">
       <label>Mata Pelajaran</label>
       <input type="text" id="mapel" value="IPS" placeholder="Contoh: IPS, IPA">
-    </div>
-
-    <div class="form-group">
-      <label>Kelas</label>
-      <select id="kelas">
-        <option value="8 A">8 A</option>
-        <option value="8 B">8 B</option>
-        <option value="8 C">8 C</option>
-        <option value="8 D">8 D</option>
-        <option value="9 A">9 A</option>
-        <option value="9 B">9 B</option>
-        <option value="9 C">9 C</option>
-        <option value="9 D">9 D</option>
-      </select>
     </div>
 
     <div class="form-group">
@@ -444,11 +444,11 @@
     </div>
 
     <div class="form-group">
-      <label>Capaian Pembelajaran (CP) / Topik Utamanya</label>
-      <textarea id="cpInput" placeholder="Masukkan CP atau topik singkat untuk dasar auto-generate (Opsional)"></textarea>
+      <label>Tujuan Pembelajaran (TP) / Capaian Materi</label>
+      <textarea id="cpInput" placeholder="Masukkan Capaian Pembelajaran atau topik utama yang dipelajari (Misal: Perubahan Sosial Budaya dan Modernisasi)"></textarea>
     </div>
 
-    <button class="btn-generate" onclick="generateRPP()">Generate Perencanaan</button>
+    <button class="btn-generate" onclick="generateRPP(true)">Simpan & Generate Perencanaan</button>
   </div>
 
   <!-- HASIL PREVIEW DOKUMEN -->
@@ -474,7 +474,7 @@
         </tr>
         <tr>
           <td>KELAS</td>
-          <td>: <span id="outKelas">8 A</span></td>
+          <td>: <span id="outKelas">9 A</span></td>
         </tr>
         <tr>
           <td>TAHUN PELAJARAN / SEMESTER</td>
@@ -491,11 +491,11 @@
       <div class="content-block">
         <strong>Dimensi Profil Lulusan (DPL):</strong>
         <div class="dpl-container" id="outDpl">
-          <div style="padding-left: 10px;"><em>Klik 'Generate Perencanaan' untuk menampilkan DPL yang dipilih...</em></div>
+          <div style="padding-left: 10px;"><em>(Data kosong. Silakan isi form dan klik 'Simpan & Generate Perencanaan')</em></div>
         </div>
       </div>
 
-      <!-- DESAIN PEMBELAJARAN (TITIK DUA DIBUAT SEJAJAR LURUS) -->
+      <!-- DESAIN PEMBELAJARAN -->
       <div class="section-header">DESAIN PEMBELAJARAN</div>
       <div class="content-block">
         <div class="dp-container">
@@ -525,26 +525,7 @@
 
         <p><strong>B. Inti</strong></p>
         <div id="outPengalamanIntiDetail">
-          <strong>1. Memahami (Berkesadaran)</strong>
-          <ol class="list-inti">
-            <li>Peserta didik secara berkesadaran mengamati tayangan/bahan bacaan studi kasus kontekstual terkait <span class="mapel-text">IPS</span>.</li>
-            <li>Peserta didik dengan nalar kritis mengidentifikasi masalah utama dan merumuskan pertanyaan kunci secara individu maupun kelompok.</li>
-            <li>Guru memberikan <em>scaffolding</em> berupa bimbingan pertanyaan terarah untuk memperdalam pemahaman konsep awal.</li>
-          </ol>
-
-          <strong>2. Mengaplikasi (Berkesadaran dan Bermakna)</strong>
-          <ol class="list-inti">
-            <li>Peserta didik membentuk kelompok kolaboratif untuk merancang solusi kontekstual atas permasalahan <span class="mapel-text">IPS</span> yang diangkat.</li>
-            <li>Setiap kelompok menyusun karya (dapat berupa infografis, poster, laporan ringkas, atau tayangan digital) secara bermakna dan mandiri.</li>
-            <li>Peserta didik mengomunikasikan hasil kerja melalui sesi <em>Gallery Walk</em> atau presentasi interaktif, serta saling memberikan tanggapan.</li>
-          </ol>
-
-          <strong>3. Merefleksi (Berkesadaran, Bermakna dan Menggembirakan)</strong>
-          <ol class="list-inti">
-            <li>Peserta didik bersama guru melakukan refleksi mendalam mengenai konsep penting <span class="mapel-text">IPS</span> yang telah dipahami.</li>
-            <li>Peserta didik mengidentifikasi tantangan atau kesulitan yang dihadapi selama proses kerja kelompok serta bagaimana cara mengatasinya.</li>
-            <li>Pembelajaran ditutup dengan kegiatan apresiasi (<em>fun feedback/emoji refleksi</em>) untuk menciptakan perasaan gembira dan berkesan.</li>
-          </ol>
+          <em>(Data kosong. Isi TP/Materi untuk menyusun kegiatan inti secara kompleks)</em>
         </div>
 
         <p><strong>C. Penutup</strong></p>
@@ -553,7 +534,7 @@
 
       <!-- ASESMEN PEMBELAJARAN LENGKAP & RUBRIK -->
       <div class="section-header">ASESMEN PEMBELAJARAN & RUBRIK EVALUASI</div>
-      <div class="content-block">
+      <div class="content-block" id="asesmenBlock">
         
         <!-- 1. RUBRIK ASESMEN AWAL -->
         <p><strong>1. Rubrik Asesmen Pembelajaran Awal (Diagnostik / Kesiapan Belajar)</strong></p>
@@ -650,7 +631,6 @@
       <!-- BAGIAN TANDA TANGAN LURUS SEJAJAR PRESISI -->
       <table class="signature-table">
         <tr>
-          <!-- BARIS 1: JABATAN & KOTA TANGGAL -->
           <td class="sig-left">
             Mengetahui,<br>
             Kepala <span id="outSekolahTtd">[Nama Sekolah]</span>
@@ -661,12 +641,10 @@
           </td>
         </tr>
         <tr>
-          <!-- BARIS 2: RUANG KOSONG TTD -->
           <td class="signature-space"></td>
           <td class="signature-space"></td>
         </tr>
         <tr>
-          <!-- BARIS 3: NAMA DAN NIP SEJAJAR LURUS -->
           <td class="sig-left">
             <strong><span id="outNamaKepsek">[Nama Kepala Sekolah]</span></strong><br>
             NIP. <span id="outNipKepsek">[NIP Kepala Sekolah]</span>
@@ -683,8 +661,77 @@
 </div>
 
 <script>
-  function generateRPP() {
-    // 1. Ambil nilai input manual
+  let rpmDatabase = {};
+  let currentTingkat = "9"; // Menyimpan tingkat kelas saat ini (default: 9)
+
+  // Ekstrak angka tingkat kelas (misal "9 A" -> "9", "8 C" -> "8")
+  function getTingkatKelas(kelasStr) {
+    return kelasStr.trim().split(' ')[0];
+  }
+
+  // Fungsi penanganan perubahan kelas
+  function gantiKelasData() {
+    const selectedKelas = document.getElementById('kelas').value;
+    const newTingkat = getTingkatKelas(selectedKelas);
+
+    // Cek jika pindah ke TINGKAT KELAS YANG BERBEDAI (Misal dari Kelas 9 ke Kelas 8)
+    if (newTingkat !== currentTingkat) {
+      currentTingkat = newTingkat;
+      kosongkanFormDanPreview(selectedKelas);
+      return;
+    }
+
+    // Jika dalam TINGKAT KELAS YANG SAMA (Misal dari 9 A ke 9 B)
+    if (rpmDatabase[selectedKelas]) {
+      muatDataKeForm(rpmDatabase[selectedKelas]);
+      generateRPP(false);
+    } else {
+      // Jika kelas paralel tersebut belum punya data khusus, kosongkan materi
+      document.getElementById('cpInput').value = '';
+      generateRPP(false);
+    }
+  }
+
+  // Mengosongkan total form input & pratinjau dokumen ketika berpindah tingkat
+  function kosongkanFormDanPreview(selectedKelas) {
+    document.getElementById('cpInput').value = '';
+    document.getElementById('alokasiWaktu').value = '';
+    
+    // Uncheck semua DPL
+    for (let i = 1; i <= 8; i++) {
+      document.getElementById(`dpl${i}`).checked = false;
+    }
+
+    // Reset Pratinjau Dokumen
+    document.getElementById('outKelas').innerText = selectedKelas;
+    document.getElementById('outDpl').innerHTML = `<div style="padding-left:10px; color:#ef4444;"><em>[Data Kosong - Berpindah ke Tingkat Kelas ${selectedKelas}] Silakan isi Capaian Pembelajaran baru dan pilih DPL.</em></div>`;
+    document.getElementById('outTp').innerText = '-';
+    document.getElementById('outPedagogis').innerText = '-';
+    document.getElementById('outLingkungan').innerText = '-';
+    document.getElementById('outPengalamanAwal').innerText = '-';
+    document.getElementById('outPengalamanIntiDetail').innerHTML = `<em style="color:#ef4444;">[Data Kosong] Silakan masukkan Capaian Pembelajaran/Materi baru.</em>`;
+    document.getElementById('outPengalamanPenutup').innerText = '-';
+  }
+
+  function muatDataKeForm(d) {
+    document.getElementById('sekolah').value = d.sekolah || '';
+    document.getElementById('namaGuru').value = d.namaGuru || '';
+    document.getElementById('nipGuru').value = d.nipGuru || '';
+    document.getElementById('namaKepsek').value = d.namaKepsek || '';
+    document.getElementById('nipKepsek').value = d.nipKepsek || '';
+    document.getElementById('tempatTanggal').value = d.tempatTanggal || '';
+    document.getElementById('mapel').value = d.mapel || 'IPS';
+    document.getElementById('tapelSem').value = d.tapelSem || '2026 - 2027 / Semester 1 (Ganjil)';
+    document.getElementById('alokasiWaktu').value = d.alokasiWaktu || '';
+    document.getElementById('cpInput').value = d.cpInput || '';
+
+    for (let i = 1; i <= 8; i++) {
+      document.getElementById(`dpl${i}`).checked = d.dplSelected ? d.dplSelected.includes(`dpl${i}`) : false;
+    }
+  }
+
+  function generateRPP(isSaving = true) {
+    const kelas = document.getElementById('kelas').value;
     const sekolah = document.getElementById('sekolah').value || '[Nama Sekolah]';
     const namaGuru = document.getElementById('namaGuru').value || '[Nama Guru]';
     const nipGuru = document.getElementById('nipGuru').value || '................................';
@@ -692,12 +739,33 @@
     const nipKepsek = document.getElementById('nipKepsek').value || '................................';
     const tempatTanggal = document.getElementById('tempatTanggal').value || '[Tempat, Tanggal]';
     const mapel = document.getElementById('mapel').value || 'IPS';
-    const kelas = document.getElementById('kelas').value;
     const tapelSem = document.getElementById('tapelSem').value;
     const alokasiWaktu = document.getElementById('alokasiWaktu').value || '[Alokasi Waktu]';
-    const cpInput = document.getElementById('cpInput').value || 'Menganalisis dan menerapkan konsep dasar materi';
+    const rawCpInput = document.getElementById('cpInput').value.trim();
 
-    // 2. Tampilkan Metadata Dokumen
+    if (!rawCpInput) {
+      alert("Silakan isi Tujuan Pembelajaran / Capaian Materi terlebih dahulu!");
+      return;
+    }
+
+    const topikMateri = rawCpInput;
+
+    let dplSelected = [];
+    for (let i = 1; i <= 8; i++) {
+      if (document.getElementById(`dpl${i}`).checked) {
+        dplSelected.push(`dpl${i}`);
+      }
+    }
+
+    // Simpan data ke memori internal
+    if (isSaving) {
+      rpmDatabase[kelas] = {
+        sekolah, namaGuru, nipGuru, namaKepsek, nipKepsek,
+        tempatTanggal, mapel, tapelSem, alokasiWaktu, cpInput: rawCpInput, dplSelected
+      };
+    }
+
+    // Tampilkan Metadata
     document.getElementById('outSekolah').innerText = sekolah;
     document.getElementById('outNamaGuru').innerText = namaGuru;
     document.getElementById('outMapel').innerText = mapel;
@@ -705,7 +773,6 @@
     document.getElementById('outTapelSem').innerText = tapelSem;
     document.getElementById('outAlokasiWaktu').innerText = alokasiWaktu;
 
-    // Tampilkan pada Tanda Tangan
     document.getElementById('outSekolahTtd').innerText = sekolah;
     document.getElementById('outNamaKepsek').innerText = namaKepsek;
     document.getElementById('outNipKepsek').innerText = nipKepsek;
@@ -714,11 +781,7 @@
     document.getElementById('outNamaGuruTtd').innerText = namaGuru;
     document.getElementById('outNipGuru').innerText = nipGuru;
 
-    // Update teks Mapel secara otomatis pada bagian Inti
-    const mapelElements = document.querySelectorAll('.mapel-text');
-    mapelElements.forEach(el => el.innerText = mapel);
-
-    // 3. Generate Checkbox Dimensi Profil Lulusan (DPL) - Format Tabel Sejajar Titik Dua (:)
+    // Generate DPL
     const checkboxes = document.querySelectorAll('#dplCheckboxGroup input[type="checkbox"]:checked');
     let dplHtml = "";
     if (checkboxes.length === 0) {
@@ -738,17 +801,49 @@
     }
     document.getElementById('outDpl').innerHTML = dplHtml;
 
-    // 4. Generate Desain & Pengalaman Belajar
-    document.getElementById('outTp').innerText = `Melalui pendekatan pembelajaran mendalam, peserta didik mampu ${cpInput.toLowerCase()} pada mata pelajaran ${mapel} dengan menunjukkan sikap kolaboratif, bernalar kritis, dan pemahaman yang bermakna.`;
-    
-    document.getElementById('outPedagogis').innerText = `Model Pembelajaran Berbasis Masalah (Problem-Based Learning) & Inquiry-Based Learning, dikombinasikan dengan teknik scaffolding, diskusi kelompok, dan presentasi interaktif.`;
-    
-    document.getElementById('outLingkungan').innerText = `Ruang kelas yang fleksibel, aman, dan inklusif. Memanfaatkan pojok baca, media digital (interaktif), serta lingkungan fisik sekolah sebagai sumber belajar nyata.`;
+    // Desain Pembelajaran
+    document.getElementById('outTp').innerText = `Melalui pendekatan pembelajaran mendalam dan studi kasus, peserta didik mampu mengalisis, mengevaluasi, serta menyajikan pemahaman komprehensif terkait ${topikMateri.toLowerCase()} pada mata pelajaran ${mapel} dengan menunjukkan sikap kritis, kolaboratif, dan mandiri.`;
+    document.getElementById('outPedagogis').innerText = `Model Pembelajaran Berbasis Masalah (Problem-Based Learning) dan Penyelidikan Terbimbing (Guided Inquiry), dipadukan dengan teknik diskusi kelompok mendalam, analisis studi kasus nyata, dan pameran karya.`;
+    document.getElementById('outLingkungan').innerText = `Lingkungan kelas yang kolaboratif, aman, dan memicu rasa ingin tahu. Memanfaatkan media pembelajaran digital/visual, artikel analisis, serta lingkungan nyata sekitar sekolah sebagai sumber data.`;
 
-    document.getElementById('outPengalamanAwal').innerText = `Guru membuka pembelajaran dengan salam, kesadaran penuh (mindfulness breve), melakukan apersepsi interaktif berupa kuis cepat/pertanyaan pemantik terkait topik ${mapel}, serta menjelaskan tujuan pembelajaran dan profil keberhasilan yang akan dicapai.`;
-    
-    document.getElementById('outPengalamanPenutup').innerText = `Guru dan peserta didik membuat rangkuman poin-poin penting pembelajaran, memberikan umpan balik penguatan, melakukan penilaian refleksi diri singkat, menginformasikan materi untuk pertemuan berikutnya, dan mengakhiri kegiatan dengan doa bersama.`;
+    // Pengalaman Belajar Awal & Penutup
+    document.getElementById('outPengalamanAwal').innerText = `Guru membuka pembelajaran dengan orientasi yang bermakna: menyapa peserta didik, berdoa bersama, melatih fokus belajar, memberikan tes diagnostik singkat, serta mengajukan pertanyaan pemantik kontekstual mengenai ${topikMateri} guna memancing rasa ingin tahu awal peserta didik.`;
+    document.getElementById('outPengalamanPenutup').innerText = `Guru bersama peserta didik merangkum struktur konsep materi ${topikMateri}, melakukan evaluasi reflektif atas proses belajar, memberikan umpan balik penguatan, menyampaikan tugas tindak lanjut, dan mengakhiri kegiatan pembelajaran dengan doa penutup.`;
+
+    // Pengalaman Belajar INTI KOMPLEKS & MENDALAM DARI CP/MATERI
+    const kegiatanIntiKompleksHtml = `
+      <strong>1. Memahami (Berkesadaran & Konstruksi Konsep Mendalam)</strong>
+      <ol class="list-inti">
+        <li><strong>Orientasi Masalah Kontekstual:</strong> Peserta didik mengamati paparan materi dan analisis studi kasus nyata yang berkaitan langsung dengan <em>${topikMateri}</em> melalui tayangan visual atau lembar bacaan kritis.</li>
+        <li><strong>Identifikasi & Penjelajahan Masalah:</strong> Peserta didik secara mandiri memetakan konsep-konsep kunci, mengidentifikasi akar permasalahan, dan merumuskan pertanyaan-pertanyaan mendalam (HOTS) terkait <em>${topikMateri}</em>.</li>
+        <li><strong>Bimbingan Bertahap (Scaffolding):</strong> Guru memberikan stimulus dan pertanyaan pengarah untuk membimbing peserta didik menghubungkan konsep baru materi ${mapel} dengan pengetahuan dasar yang telah mereka miliki sebelumnya.</li>
+      </ol>
+
+      <strong>2. Mengaplikasi (Berkesadaran, Bermakna, Kolaborasi & Investigasi Kritis)</strong>
+      <ol class="list-inti">
+        <li><strong>Pembentukan Kelompok Investigasi:</strong> Peserta didik dibagi ke dalam kelompok heterogen untuk mendiskusikan pemecahan masalah kompleks mengenai <em>${topikMateri}</em>.</li>
+        <li><strong>Pengumpulan Data & Analisis Solusi:</strong> Setiap kelompok mengumpulkan informasi pendukung dari berbagai sumber belajar yang relevan, mendiskusikan argumen logis, dan menyusun alternatif penyelesaian masalah secara sistematis.</li>
+        <li><strong>Penyusunan Produk Kreatif:</strong> Kelompok mengolah hasil analisis menjadi produk nyata (seperti lembar analisis masalah, infografis konsep, atau peta pikiran terstruktur) terkait <em>${topikMateri}</em>.</li>
+        <li><strong>Pameran Karya & Penilaian Antar-Teman (Peer-Review):</strong> Setiap kelompok menyajikan hasil karyanya melalui diskusi panel atau pameran karya, di mana kelompok lain memberikan tanggapan balik, masukan kritis, dan apresiasi secara santun.</li>
+      </ol>
+
+      <strong>3. Merefleksi (Berkesadaran, Bermakna, Menggembirakan & Evaluasi Kritis)</strong>
+      <ol class="list-inti">
+        <li><strong>Sintesis & Konfirmasi Konsep:</strong> Peserta didik di bawah bimbingan guru menyimpulkan seluruh rangkaian temuan dan meluruskan pemahaman yang kurang tepat mengenai topik <em>${topikMateri}</em>.</li>
+        <li><strong>Refleksi Diri & Pemaknaan:</strong> Peserta didik mengevaluasi secara jujur sejauh mana pemahaman materi telah dicapai, hambatan utama yang dihadapi, serta manfaat praktis dari materi ini dalam kehidupan sehari-hari.</li>
+        <li><strong>Apresiasi & Penguatan Positif:</strong> Guru memberikan umpan balik konstruktif dan penghargaan atas keaktifan serta kerja sama tim, sehingga menciptakan suasana belajar yang menggembirakan dan berkesan.</li>
+      </ol>
+    `;
+
+    document.getElementById('outPengalamanIntiDetail').innerHTML = kegiatanIntiKompleksHtml;
   }
+
+  // Inisialisasi awal
+  window.onload = function() {
+    document.getElementById('cpInput').value = "Perubahan Sosial Budaya dan Modernisasi Masyarakat";
+    document.getElementById('alokasiWaktu').value = "2 x 40 Menit (1 Pertemuan)";
+    generateRPP(true);
+  };
 </script>
 
 </body>
