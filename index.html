@@ -117,7 +117,7 @@
       background-color: #047857;
     }
 
-    /* Format Dokumen Hasil Generate (Font Times New Roman 12pt) */
+    /* Format Dokumen Hasil Generate */
     .document-paper {
       background: white;
       padding: 40px;
@@ -155,7 +155,7 @@
       padding-right: 15px;
     }
     
-    /* Header Sub-Bagian dengan Kotak Biru Muda */
+    /* Header Sub-Bagian */
     .section-header {
       font-weight: bold;
       background-color: #e0f2fe;
@@ -173,7 +173,7 @@
       font-size: 12pt;
     }
     
-    /* Format DPL Sejajar Lurus Titik Dua (:) */
+    /* Format DPL Sejajar Titik Dua */
     .dpl-container {
       display: table;
       width: 100%;
@@ -210,7 +210,7 @@
       padding-bottom: 4px;
     }
 
-    /* Format Desain Pembelajaran (DP) Sejajar Lurus Titik Dua (:) */
+    /* Format Desain Pembelajaran */
     .dp-container {
       display: table;
       width: 100%;
@@ -247,21 +247,42 @@
       margin: 5px 0;
       padding-left: 20px;
     }
-    .list-inti {
-      list-style-type: lower-alpha;
-      margin: 5px 0 15px 20px;
+    
+    /* Style Format Inti */
+    .inti-sub-title {
+      font-weight: bold;
+      font-size: 12pt;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    .list-bullet-inti {
+      list-style-type: disc;
+      margin: 5px 0 10px 20px;
       padding-left: 0;
     }
-    .list-inti li {
+    .list-bullet-inti li {
+      margin-bottom: 6px;
+    }
+    .list-subbullet-inti {
+      list-style-type: circle;
+      margin: 4px 0 6px 20px;
+      padding-left: 0;
+    }
+    .list-subbullet-inti li {
       margin-bottom: 4px;
     }
+    .list-square-inti {
+      list-style-type: square;
+      margin: 4px 0 6px 20px;
+      padding-left: 0;
+    }
 
-    /* Format Tabel Rubrik Asesmen */
+    /* Format Tabel Rubrik Asesmen Interval */
     .rubric-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
-      margin-bottom: 15px;
+      margin-top: 8px;
+      margin-bottom: 20px;
       font-size: 11pt;
     }
     .rubric-table th, .rubric-table td {
@@ -278,7 +299,7 @@
       vertical-align: middle;
     }
 
-    /* Styling Tabel Tanda Tangan Presisi, Lurus, & Sejajar */
+    /* Tabel Tanda Tangan */
     .signature-table {
       width: 100%;
       margin-top: 40px;
@@ -303,7 +324,7 @@
       height: 75px;
     }
 
-    /* Format Khusus Mode Cetak */
+    /* Mode Cetak */
     @media print {
       body {
         background: white;
@@ -400,8 +421,12 @@
     </div>
 
     <div class="form-group">
-      <label>Alokasi Waktu</label>
-      <input type="text" id="alokasiWaktu" placeholder="Contoh: 2 x 40 Menit (1 Pertemuan)">
+      <label>Alokasi Waktu Jam Pembelajaran (JP)</label>
+      <select id="jpSelect">
+        <option value="4" selected>4 JP ( 2 x Pertemuan ) - @40 Menit</option>
+        <option value="2">2 JP ( 1 x Pertemuan ) - @40 Menit</option>
+        <option value="3">3 JP ( 1 x Pertemuan ) - @40 Menit</option>
+      </select>
     </div>
 
     <!-- 8 PILIHAN DPL -->
@@ -445,7 +470,7 @@
 
     <div class="form-group">
       <label>Tujuan Pembelajaran (TP) / Capaian Materi</label>
-      <textarea id="cpInput" placeholder="Masukkan Capaian Pembelajaran atau topik utama yang dipelajari (Misal: Perubahan Sosial Budaya dan Modernisasi)"></textarea>
+      <textarea id="cpInput" placeholder="Masukkan Capaian Pembelajaran atau topik utama yang dipelajari"></textarea>
     </div>
 
     <button class="btn-generate" onclick="generateRPP(true)">Simpan & Generate Perencanaan</button>
@@ -482,7 +507,7 @@
         </tr>
         <tr>
           <td>ALOKASI WAKTU</td>
-          <td>: <span id="outAlokasiWaktu">[Alokasi Waktu]</span></td>
+          <td>: <span id="outAlokasiWaktu">4 JP ( 2 x Pertemuan )</span></td>
         </tr>
       </table>
 
@@ -525,110 +550,144 @@
 
         <p><strong>B. Inti</strong></p>
         <div id="outPengalamanIntiDetail">
-          <em>(Data kosong. Isi TP/Materi untuk menyusun kegiatan inti secara kompleks)</em>
+          <em>(Data kosong. Isi TP/Materi untuk menyusun kegiatan inti)</em>
         </div>
 
         <p><strong>C. Penutup</strong></p>
         <div id="outPengalamanPenutup">-</div>
       </div>
 
-      <!-- ASESMEN PEMBELAJARAN LENGKAP & RUBRIK -->
+      <!-- ASESMEN PEMBELAJARAN & RUBRIK EVALUASI INTERVAL -->
       <div class="section-header">ASESMEN PEMBELAJARAN & RUBRIK EVALUASI</div>
       <div class="content-block" id="asesmenBlock">
         
-        <!-- 1. RUBRIK ASESMEN AWAL -->
-        <p><strong>1. Rubrik Asesmen Pembelajaran Awal (Diagnostik / Kesiapan Belajar)</strong></p>
+        <!-- 1. ASESMEN AWAL -->
+        <p><strong>1. Asesmen pada Awal Pembelajaran</strong></p>
+        <p style="margin-top:2px; margin-bottom:8px;">
+          <strong>Asesmen Diagnostik Kognitif:</strong> Melalui pertanyaan lisan singkat, kuis interaktif (misalnya menggunakan aplikasi Kahoot! atau Google Forms), atau pre-test singkat mengenai pemahaman awal peserta didik tentang "<span class="outTopikMateriInline">perubahan</span>" atau fenomena di sekitar mereka yang menunjukkan adanya pergeseran. Tujuannya untuk mengukur pengetahuan awal, mengidentifikasi miskonsepsi, dan menyesuaikan strategi pembelajaran.
+        </p>
+
+        <p style="font-weight:bold; margin-bottom:4px; font-size:11pt;">Rubrik Penilaian Interval (Asesmen Awal):</p>
         <table class="rubric-table">
           <thead>
             <tr>
-              <th style="width: 20%;" class="th-center">Aspek Penilaian</th>
-              <th style="width: 20%;" class="th-center">Perlu Bimbingan<br>(1)</th>
-              <th style="width: 20%;" class="th-center">Cukup<br>(2)</th>
-              <th style="width: 20%;" class="th-center">Baik<br>(3)</th>
-              <th style="width: 20%;" class="th-center">Sangat Baik<br>(4)</th>
+              <th style="width: 25%;" class="th-center">Kriteria Penilaian</th>
+              <th style="width: 18%;" class="th-center">Perlu Bimbingan<br>(0 - 60)</th>
+              <th style="width: 18%;" class="th-center">Cukup<br>(61 - 70)</th>
+              <th style="width: 18%;" class="th-center">Baik<br>(71 - 85)</th>
+              <th style="width: 21%;" class="th-center">Sangat Baik<br>(86 - 100)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Pemahaman Prasyarat</strong></td>
-              <td>Belum mampu menjawab pertanyaan dasar materi prasyarat.</td>
-              <td>Mampu menjawab sebagian materi prasyarat dengan bantuan guru.</td>
-              <td>Mampu menjawab materi prasyarat secara mandiri dan benar.</td>
-              <td>Mampu mengaitkan materi prasyarat dengan analisis konteks baru.</td>
-            </tr>
-            <tr>
-              <td><strong>Kesiapan & Kesadaran Belajar</strong></td>
-              <td>Pasif dan membutuhkan dorongan penuh untuk memulai pembelajaran.</td>
-              <td>Menunjukkan kesiapan tetapi masih ragu menyampaikan ide awal.</td>
-              <td>Aktif dan siap mengikuti alur pembelajaran dengan baik.</td>
-              <td>Sangat antusias, fokus penuh, dan menginspirasi teman sekelas.</td>
+              <td><strong>Pemahaman Konsep Awal & Miskonsepsi</strong></td>
+              <td>Belum memahami konsep dasar perubahan dan mengalami miskonsepsi mendasar.</td>
+              <td>Memahami gambaran umum perubahan namun masih terbatas pada contoh sederhana.</td>
+              <td>Mampu menjelaskan konsep perubahan dasar dan contoh fenomena dengan baik.</td>
+              <td>Memahami konsep perubahan secara luas dan mampu mengidentifikasi pergeseran fenomena secara rinci.</td>
             </tr>
           </tbody>
         </table>
 
-        <!-- 2. RUBRIK ASESMEN PROSES -->
-        <p><strong>2. Rubrik Asesmen Pada Proses Pembelajaran (Formatif / Kinerja Diskusi & Proyek)</strong></p>
+        <!-- 2. ASESMEN PROSES -->
+        <p><strong>2. Asesmen pada Proses Pembelajaran</strong></p>
+        <p style="margin-top:2px; margin-bottom:8px;">
+          <strong>Observasi Partisipasi Diskusi Kelompok:</strong> Guru mengamati keaktifan setiap anggota kelompok dalam berdiskusi, kemampuan mengemukakan pendapat, memberikan argumen yang logis, mendengarkan, dan menghargai pendapat orang lain (menggunakan rubrik observasi partisipasi yang terstruktur dan detail).
+        </p>
+
+        <p style="font-weight:bold; margin-bottom:4px; font-size:11pt;">Rubrik Penilaian Interval (Asesmen Proses):</p>
         <table class="rubric-table">
           <thead>
             <tr>
-              <th style="width: 20%;" class="th-center">Aspek Penilaian</th>
-              <th style="width: 20%;" class="th-center">Perlu Bimbingan<br>(1)</th>
-              <th style="width: 20%;" class="th-center">Cukup<br>(2)</th>
-              <th style="width: 20%;" class="th-center">Baik<br>(3)</th>
-              <th style="width: 20%;" class="th-center">Sangat Baik<br>(4)</th>
+              <th style="width: 25%;" class="th-center">Kriteria Penilaian</th>
+              <th style="width: 18%;" class="th-center">Perlu Bimbingan<br>(0 - 60)</th>
+              <th style="width: 18%;" class="th-center">Cukup<br>(61 - 70)</th>
+              <th style="width: 18%;" class="th-center">Baik<br>(71 - 85)</th>
+              <th style="width: 21%;" class="th-center">Sangat Baik<br>(86 - 100)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Kolaborasi & Gotong Royong</strong></td>
-              <td>Cenderung pasif atau bekerja sendiri dalam kelompok.</td>
-              <td>Ikut serta jika diminta oleh rekan satu kelompok.</td>
-              <td>Aktif berdiskusi dan menjalankan peran kelompok dengan baik.</td>
-              <td>Menjadi inisiator, proaktif membantu rekan, dan menghargai ide.</td>
+              <td><strong>Keaktifan & Partisipasi Diskusi</strong></td>
+              <td>Pasif, tidak memberikan pendapat, atau kurang responsif dalam kelompok.</td>
+              <td>Mengikuti diskusi secara cukup aktif tetapi jarang memberikan masukan utama.</td>
+              <td>Aktif berdiskusi, mendengarkan rekan, dan menyampaikan gagasan dengan jelas.</td>
+              <td>Sangat aktif memimpin/memfasilitasi ide, menghargai pendapat lain, dan responsif.</td>
             </tr>
             <tr>
-              <td><strong>Penalaran Kritis (Analisis Masalah)</strong></td>
-              <td>Kesulitan mengidentifikasi permasalahan pada LKPD/studi kasus.</td>
-              <td>Mampu menemukan masalah tetapi alur solusi kurang sistematis.</td>
-              <td>Mampu menganalisis masalah dan memberikan argumentasi logis.</td>
-              <td>Kritis, solutif, dan menyusun sintesis masalah secara komprehensif.</td>
+              <td><strong>Kualitas Argumentasi</strong></td>
+              <td>Pendapat tidak relevan dengan topik atau tidak disertai alasan logis.</td>
+              <td>Menyampaikan gagasan sederhana namun argumen belum cukup kuat/jelas.</td>
+              <td>Memberikan argumen yang logis dan relevan dengan topik yang didiskusikan.</td>
+              <td>Menyampaikan argumen yang kritis, solutif, analitis, dan didukung bukti nyata.</td>
             </tr>
           </tbody>
         </table>
 
-        <!-- 3. RUBRIK ASESMEN AKHIR -->
-        <p><strong>3. Rubrik Asesmen Pada Akhir Pembelajaran (Sumatif / Produk & Refleksi)</strong></p>
+        <!-- 3. ASESMEN AKHIR -->
+        <p><strong>3. Asesmen pada Akhir Pembelajaran</strong></p>
+        <ul style="margin-top:2px; margin-bottom:8px; padding-left:20px;">
+          <li>
+            <strong>Penilaian Hasil Proyek Mini "Perubahan di Lingkunganku: Analisis dan Solusi":</strong>
+            <ul style="list-style-type: circle; padding-left:20px; margin-top:3px; margin-bottom:5px;">
+              <li><strong>Portofolio Produk:</strong> Penilaian terhadap kualitas produk (poster, infografis, atau video) yang dihasilkan, meliputi kualitas konten (akurasi data, kedalaman analisis, relevansi, solusi yang diusulkan), kreativitas, kejelasan informasi, dan kesesuaian dengan tema (menggunakan rubrik penilaian produk yang spesifik dan detail).</li>
+              <li><strong>Penilaian Keterampilan Presentasi Produk:</strong> Penilaian terhadap kemampuan menyampaikan hasil proyek secara lisan di depan kelas, meliputi kelancaran, kepercayaan diri, penguasaan materi, dan kemampuan menjawab pertanyaan dari guru dan teman secara kritis.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Tes Tertulis Komprehensif:</strong> Soal pilihan ganda dan esai yang mengukur pemahaman konsep perubahan sosial, faktor-faktornya, dampak (positif dan negatif), dan kemampuan analisis terhadap studi kasus yang lebih kompleks. Soal esai dapat meminta peserta didik untuk merumuskan solusi inovatif terhadap suatu masalah perubahan sosial yang relevan dengan kehidupan nyata.
+          </li>
+          <li>
+            <strong>Penilaian Jurnal Reflektif:</strong> Penilaian terhadap kedalaman refleksi, kemampuan mengaitkan materi dengan pengalaman pribadi dan konteks masyarakat, serta perumusan sikap dan rencana aksi nyata yang menunjukkan kesadaran diri dan tanggung jawab sosial.
+          </li>
+        </ul>
+
+        <p style="font-weight:bold; margin-bottom:4px; font-size:11pt;">Rubrik Penilaian Interval (Asesmen Akhir):</p>
         <table class="rubric-table">
           <thead>
             <tr>
-              <th style="width: 20%;" class="th-center">Aspek Penilaian</th>
-              <th style="width: 20%;" class="th-center">Perlu Bimbingan<br>(1)</th>
-              <th style="width: 20%;" class="th-center">Cukup<br>(2)</th>
-              <th style="width: 20%;" class="th-center">Baik<br>(3)</th>
-              <th style="width: 20%;" class="th-center">Sangat Baik<br>(4)</th>
+              <th style="width: 25%;" class="th-center">Aspek Assessment</th>
+              <th style="width: 18%;" class="th-center">Perlu Bimbingan<br>(0 - 60)</th>
+              <th style="width: 18%;" class="th-center">Cukup<br>(61 - 70)</th>
+              <th style="width: 18%;" class="th-center">Baik<br>(71 - 85)</th>
+              <th style="width: 21%;" class="th-center">Sangat Baik<br>(86 - 100)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Kualitas Produk / Pemahaman Akhir</strong></td>
-              <td>Hasil karya/tes tidak sesuai indikator ketercapaian TP.</td>
-              <td>Hasil karya/tes memenuhi standar minimal ketercapaian.</td>
-              <td>Hasil karya/tes runtut, tepat, dan sesuai indikator TP.</td>
-              <td>Hasil karya inovatif, sangat akurat, orisinal, dan melebihi ekspektasi.</td>
+              <td><strong>Portofolio Produk Proyek Mini</strong></td>
+              <td>Konten kurang akurat, estetika tidak rapi, dan solusi tidak relevan.</td>
+              <td>Konten cukup akurat, estetika sederhana, dan solusi tergolong umum.</td>
+              <td>Konten akurat, penyajian menarik/kreatif, dan solusi realistis.</td>
+              <td>Konten sangat mendalam/akurat, visual profesional, solusi inovatif & berbobot.</td>
             </tr>
             <tr>
-              <td><strong>Komunikasi & Kemampuan Refleksi</strong></td>
-              <td>Kesulitan menyampaikan hasil pemikiran dan tidak bermakna.</td>
-              <td>Penyampaian cukup jelas, refleksi sederhana tentang pembelajaran.</td>
-              <td>Menyampaikan gagasan dengan sistematis, lugas, dan bermakna.</td>
-              <td>Komunikasi sangat persuasif, reflektif, mendalam, dan santun.</td>
+              <td><strong>Keterampilan Presentasi</strong></td>
+              <td>Tidak lancar, tidak menguasai materi, dan kesulitan menjawab pertanyaan.</td>
+              <td>Penyampaian cukup lancar namun kurang percaya diri dan ragu menjawab pertanyan.</td>
+              <td>Lancar, percaya diri, menguasai materi, dan mampu menjawab pertanyaan dengan baik.</td>
+              <td>Sangat komunikatif, persuasif, menguasai materi penuh, serta menjawab kritis & tepat.</td>
+            </tr>
+            <tr>
+              <td><strong>Tes Tertulis Komprehensif</strong></td>
+              <td>Skor tes di bawah kriteria minimum (banyak salah konsep dasar).</td>
+              <td>Memenuhi KKM dasar, pemahaman esai masih bersifat hafalan baku.</td>
+              <td>Di atas KKM, mampu menganalisis studi kasus esai dengan logis.</td>
+              <td>Nilai sangat tinggi, analisis esai runtut, komprehensif, dan menghadirkan solusi baru.</td>
+            </tr>
+            <tr>
+              <td><strong>Jurnal Reflektif</strong></td>
+              <td>Refleksi singkat/dangkal dan belum tampak rencana aksi personal.</td>
+              <td>Menuliskan refleksi umum tetapi kurang mengaitkan dengan pengalaman pribadi.</td>
+              <td>Refleksi mendalam, mengaitkan materi dengan diri, dan menyusun langkah nyata.</td>
+              <td>Refleksi sangat bermakna, artikulatif, menunjukkan pemikiran kritis & tanggung jawab sosial.</td>
             </tr>
           </tbody>
         </table>
 
       </div>
 
-      <!-- BAGIAN TANDA TANGAN LURUS SEJAJAR PRESISI -->
+      <!-- BAGIAN TANDA TANGAN -->
       <table class="signature-table">
         <tr>
           <td class="sig-left">
@@ -662,47 +721,39 @@
 
 <script>
   let rpmDatabase = {};
-  let currentTingkat = "9"; // Menyimpan tingkat kelas saat ini (default: 9)
+  let currentTingkat = "9"; 
 
-  // Ekstrak angka tingkat kelas (misal "9 A" -> "9", "8 C" -> "8")
   function getTingkatKelas(kelasStr) {
     return kelasStr.trim().split(' ')[0];
   }
 
-  // Fungsi penanganan perubahan kelas
   function gantiKelasData() {
     const selectedKelas = document.getElementById('kelas').value;
     const newTingkat = getTingkatKelas(selectedKelas);
 
-    // Cek jika pindah ke TINGKAT KELAS YANG BERBEDAI (Misal dari Kelas 9 ke Kelas 8)
     if (newTingkat !== currentTingkat) {
       currentTingkat = newTingkat;
       kosongkanFormDanPreview(selectedKelas);
       return;
     }
 
-    // Jika dalam TINGKAT KELAS YANG SAMA (Misal dari 9 A ke 9 B)
     if (rpmDatabase[selectedKelas]) {
       muatDataKeForm(rpmDatabase[selectedKelas]);
       generateRPP(false);
     } else {
-      // Jika kelas paralel tersebut belum punya data khusus, kosongkan materi
       document.getElementById('cpInput').value = '';
       generateRPP(false);
     }
   }
 
-  // Mengosongkan total form input & pratinjau dokumen ketika berpindah tingkat
   function kosongkanFormDanPreview(selectedKelas) {
     document.getElementById('cpInput').value = '';
-    document.getElementById('alokasiWaktu').value = '';
+    document.getElementById('jpSelect').value = '4';
     
-    // Uncheck semua DPL
     for (let i = 1; i <= 8; i++) {
       document.getElementById(`dpl${i}`).checked = false;
     }
 
-    // Reset Pratinjau Dokumen
     document.getElementById('outKelas').innerText = selectedKelas;
     document.getElementById('outDpl').innerHTML = `<div style="padding-left:10px; color:#ef4444;"><em>[Data Kosong - Berpindah ke Tingkat Kelas ${selectedKelas}] Silakan isi Capaian Pembelajaran baru dan pilih DPL.</em></div>`;
     document.getElementById('outTp').innerText = '-';
@@ -722,7 +773,7 @@
     document.getElementById('tempatTanggal').value = d.tempatTanggal || '';
     document.getElementById('mapel').value = d.mapel || 'IPS';
     document.getElementById('tapelSem').value = d.tapelSem || '2026 - 2027 / Semester 1 (Ganjil)';
-    document.getElementById('alokasiWaktu').value = d.alokasiWaktu || '';
+    document.getElementById('jpSelect').value = d.jpSelect || '4';
     document.getElementById('cpInput').value = d.cpInput || '';
 
     for (let i = 1; i <= 8; i++) {
@@ -740,7 +791,30 @@
     const tempatTanggal = document.getElementById('tempatTanggal').value || '[Tempat, Tanggal]';
     const mapel = document.getElementById('mapel').value || 'IPS';
     const tapelSem = document.getElementById('tapelSem').value;
-    const alokasiWaktu = document.getElementById('alokasiWaktu').value || '[Alokasi Waktu]';
+    
+    // Perhitungan Durasi Berdasarkan Standar Pertemuan 1 JP = 40 Menit
+    const jpVal = parseInt(document.getElementById('jpSelect').value) || 4;
+    let alokasiWaktuText = "";
+    let durasiPerPertemuan = 80; // Standar 1 kali pertemuan = 2 JP (80 menit)
+
+    if (jpVal === 4) {
+      alokasiWaktuText = "4 JP ( 2 x Pertemuan )";
+      durasiPerPertemuan = 80; // 2 JP per pertemuan
+    } else if (jpVal === 2) {
+      alokasiWaktuText = "2 JP ( 1 x Pertemuan )";
+      durasiPerPertemuan = 80; // 2 JP
+    } else {
+      alokasiWaktuText = `${jpVal} JP ( 1 x Pertemuan )`;
+      durasiPerPertemuan = jpVal * 40;
+    }
+
+    // Pembagian Waktu Inti per Pertemuan (berdasar durasiPerPertemuan)
+    const tEksplorasi = Math.round(durasiPerPertemuan * 0.30);
+    const tKelompok = Math.round(durasiPerPertemuan * 0.20);
+    const tPresentasi = Math.round(durasiPerPertemuan * 0.15);
+    const tJurnal = Math.round(durasiPerPertemuan * 0.10);
+    const tDiskusiRefleksi = Math.round(durasiPerPertemuan * 0.10);
+
     const rawCpInput = document.getElementById('cpInput').value.trim();
 
     if (!rawCpInput) {
@@ -757,21 +831,20 @@
       }
     }
 
-    // Simpan data ke memori internal
     if (isSaving) {
       rpmDatabase[kelas] = {
         sekolah, namaGuru, nipGuru, namaKepsek, nipKepsek,
-        tempatTanggal, mapel, tapelSem, alokasiWaktu, cpInput: rawCpInput, dplSelected
+        tempatTanggal, mapel, tapelSem, jpSelect: jpVal, cpInput: rawCpInput, dplSelected
       };
     }
 
-    // Tampilkan Metadata
+    // Output Metadata
     document.getElementById('outSekolah').innerText = sekolah;
     document.getElementById('outNamaGuru').innerText = namaGuru;
     document.getElementById('outMapel').innerText = mapel;
     document.getElementById('outKelas').innerText = kelas;
     document.getElementById('outTapelSem').innerText = tapelSem;
-    document.getElementById('outAlokasiWaktu').innerText = alokasiWaktu;
+    document.getElementById('outAlokasiWaktu').innerText = alokasiWaktuText;
 
     document.getElementById('outSekolahTtd').innerText = sekolah;
     document.getElementById('outNamaKepsek').innerText = namaKepsek;
@@ -780,6 +853,10 @@
     document.getElementById('outMapelTtd').innerText = mapel;
     document.getElementById('outNamaGuruTtd').innerText = namaGuru;
     document.getElementById('outNipGuru').innerText = nipGuru;
+
+    // Sinkronisasi teks materi di asesmen
+    const elemsTopik = document.querySelectorAll('.outTopikMateriInline');
+    elemsTopik.forEach(el => el.innerText = topikMateri.toLowerCase());
 
     // Generate DPL
     const checkboxes = document.querySelectorAll('#dplCheckboxGroup input[type="checkbox"]:checked');
@@ -802,46 +879,108 @@
     document.getElementById('outDpl').innerHTML = dplHtml;
 
     // Desain Pembelajaran
-    document.getElementById('outTp').innerText = `Melalui pendekatan pembelajaran mendalam dan studi kasus, peserta didik mampu mengalisis, mengevaluasi, serta menyajikan pemahaman komprehensif terkait ${topikMateri.toLowerCase()} pada mata pelajaran ${mapel} dengan menunjukkan sikap kritis, kolaboratif, dan mandiri.`;
-    document.getElementById('outPedagogis').innerText = `Model Pembelajaran Berbasis Masalah (Problem-Based Learning) dan Penyelidikan Terbimbing (Guided Inquiry), dipadukan dengan teknik diskusi kelompok mendalam, analisis studi kasus nyata, dan pameran karya.`;
-    document.getElementById('outLingkungan').innerText = `Lingkungan kelas yang kolaboratif, aman, dan memicu rasa ingin tahu. Memanfaatkan media pembelajaran digital/visual, artikel analisis, serta lingkungan nyata sekitar sekolah sebagai sumber data.`;
+    document.getElementById('outTp').innerText = `Melalui kegiatan eksplorasi, analisis kasus, dan proyek berbasis lingkungan, peserta didik mampu menguasai konsep ${topikMateri.toLowerCase()} pada mata pelajaran ${mapel} serta menyajikan solusi kreatif atas permasalahan terkait secara kritis dan reflektif.`;
+    document.getElementById('outPedagogis').innerText = `Model Pembelajaran Berbasis Masalah (Problem-Based Learning) dan Proyek (Project-Based Learning) dipadukan dengan eksplorasi interaktif, diskusi kelompok heterogen, pembuatan media digital, dan refleksi mandiri.`;
+    document.getElementById('outLingkungan').innerText = `Ruang kelas interaktif dan berpusat pada peserta didik, memanfaatkan slide audiovisual, lembar analisis kasus, media pembuatan proyek digital, serta studi fakta lingkungan sekitar.`;
 
     // Pengalaman Belajar Awal & Penutup
-    document.getElementById('outPengalamanAwal').innerText = `Guru membuka pembelajaran dengan orientasi yang bermakna: menyapa peserta didik, berdoa bersama, melatih fokus belajar, memberikan tes diagnostik singkat, serta mengajukan pertanyaan pemantik kontekstual mengenai ${topikMateri} guna memancing rasa ingin tahu awal peserta didik.`;
-    document.getElementById('outPengalamanPenutup').innerText = `Guru bersama peserta didik merangkum struktur konsep materi ${topikMateri}, melakukan evaluasi reflektif atas proses belajar, memberikan umpan balik penguatan, menyampaikan tugas tindak lanjut, dan mengakhiri kegiatan pembelajaran dengan doa penutup.`;
+    document.getElementById('outPengalamanAwal').innerText = `Guru menyapa peserta didik, berdoa bersama, mengondisikan suasana kelas, melakukan apersepsi berupa pertanyaan pemantik terkait ${topikMateri}, serta menyampaikan tujuan pembelajaran dan alur kegiatan yang akan dilakukan.`;
+    document.getElementById('outPengalamanPenutup').innerText = `Guru bersama peserta didik membuat kesimpulan akhir, memberikan apresiasi terhadap kinerja kelompok, menginformasikan materi untuk pertemuan mendatang, dan mengakhiri pembelajaran dengan doa bersama.`;
 
-    // Pengalaman Belajar INTI KOMPLEKS & MENDALAM DARI CP/MATERI
-    const kegiatanIntiKompleksHtml = `
-      <strong>1. Memahami (Berkesadaran & Konstruksi Konsep Mendalam)</strong>
-      <ol class="list-inti">
-        <li><strong>Orientasi Masalah Kontekstual:</strong> Peserta didik mengamati paparan materi dan analisis studi kasus nyata yang berkaitan langsung dengan <em>${topikMateri}</em> melalui tayangan visual atau lembar bacaan kritis.</li>
-        <li><strong>Identifikasi & Penjelajahan Masalah:</strong> Peserta didik secara mandiri memetakan konsep-konsep kunci, mengidentifikasi akar permasalahan, dan merumuskan pertanyaan-pertanyaan mendalam (HOTS) terkait <em>${topikMateri}</em>.</li>
-        <li><strong>Bimbingan Bertahap (Scaffolding):</strong> Guru memberikan stimulus dan pertanyaan pengarah untuk membimbing peserta didik menghubungkan konsep baru materi ${mapel} dengan pengetahuan dasar yang telah mereka miliki sebelumnya.</li>
-      </ol>
+    // INTI PEMBELAJARAN
+    const kegiatanIntiPersisTemplate = `
+      <div style="margin-top:10px;">
+        <ul class="list-bullet-inti">
+          <li>
+            <strong>Eksplorasi Konsep Dasar ${topikMateri} (${tEksplorasi} menit):</strong>
+            <ul class="list-subbullet-inti">
+              <li>Guru menjelaskan definisi ${topikMateri}, bentuk-bentuk/klasifikasinya, dan ciri-ciri utamanya melalui slide presentasi interaktif yang dilengkapi contoh visual, video pendek, dan studi kasus sederhana.</li>
+              <li>Peserta didik diajak bertanya, memberikan contoh dari kehidupan sehari-hari, dan berdiskusi singkat untuk memastikan pemahaman awal dan mengklarifikasi konsep.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Pembentukan Kelompok dan Identifikasi Awal (${tKelompok} menit):</strong>
+            <ul class="list-subbullet-inti">
+              <li>Peserta didik dibagi menjadi beberapa kelompok heterogen (4-5 orang) berdasarkan gaya belajar atau minat.</li>
+              <li>Setiap kelompok diberikan beberapa kartu bergambar, potongan berita, atau cuplikan video yang menunjukkan fenomena terkait <em>${topikMateri}</em>.</li>
+              <li>Kelompok mendiskusikan apa yang mereka amati dan mengidentifikasi bentuk/dampak yang terjadi pada setiap gambar/berita/video, serta memberikan alasan dan argumen pendukung.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Presentasi Singkat Kelompok (${tPresentasi} menit):</strong>
+            <ul class="list-subbullet-inti">
+              <li>Perwakilan setiap kelompok mempresentasikan hasil identifikasi singkat mereka di depan kelas.</li>
+              <li>Guru memberikan umpan balik, mengklarifikasi miskonsepsi, dan memberikan penguatan konsep secara konstruktif.</li>
+            </ul>
+          </li>
+        </ul>
 
-      <strong>2. Mengaplikasi (Berkesadaran, Bermakna, Kolaborasi & Investigasi Kritis)</strong>
-      <ol class="list-inti">
-        <li><strong>Pembentukan Kelompok Investigasi:</strong> Peserta didik dibagi ke dalam kelompok heterogen untuk mendiskusikan pemecahan masalah kompleks mengenai <em>${topikMateri}</em>.</li>
-        <li><strong>Pengumpulan Data & Analisis Solusi:</strong> Setiap kelompok mengumpulkan informasi pendukung dari berbagai sumber belajar yang relevan, mendiskusikan argumen logis, dan menyusun alternatif penyelesaian masalah secara sistematis.</li>
-        <li><strong>Penyusunan Produk Kreatif:</strong> Kelompok mengolah hasil analisis menjadi produk nyata (seperti lembar analisis masalah, infografis konsep, atau peta pikiran terstruktur) terkait <em>${topikMateri}</em>.</li>
-        <li><strong>Pameran Karya & Penilaian Antar-Teman (Peer-Review):</strong> Setiap kelompok menyajikan hasil karyanya melalui diskusi panel atau pameran karya, di mana kelompok lain memberikan tanggapan balik, masukan kritis, dan apresiasi secara santun.</li>
-      </ol>
+        <div class="inti-sub-title">Memahami (berkesadaran)</div>
+        <ul class="list-bullet-inti">
+          <li>
+            <strong>Diskusi Kelas Terbuka dan Sintesis Pengetahuan:</strong> Setelah semua presentasi kelompok, guru memfasilitasi diskusi kelas yang lebih luas untuk menyatukan berbagai perspektif dan menyintesis pemahaman komprehensif. Peserta didik diajak untuk mengidentifikasi benang merah, pola, dan prinsip-prinsip umum dari semua studi kasus <em>${topikMateri}</em> yang telah dibahas, serta merumuskan kesimpulan bersama tentang topik ini sebagai fenomena yang kompleks dan multidimensional.
+          </li>
+          <li>
+            <strong>Peta Konsep/Mind Map Komprehensif (Individu):</strong> Secara individu, peserta didik membuat peta konsep atau mind map yang komprehensif tentang <em>${topikMateri}</em>. Peta konsep ini harus mencakup definisi, bentuk, faktor penyebab, faktor penghambat, dan dampaknya secara terstruktur dan saling terkait. Ini membantu mereka mengorganisir informasi, melihat keterkaitan antar konsep, dan membangun pemahaman yang terstruktur dan mendalam. Guru dapat memberikan umpan balik personal terhadap peta konsep ini.
+          </li>
+        </ul>
 
-      <strong>3. Merefleksi (Berkesadaran, Bermakna, Menggembirakan & Evaluasi Kritis)</strong>
-      <ol class="list-inti">
-        <li><strong>Sintesis & Konfirmasi Konsep:</strong> Peserta didik di bawah bimbingan guru menyimpulkan seluruh rangkaian temuan dan meluruskan pemahaman yang kurang tepat mengenai topik <em>${topikMateri}</em>.</li>
-        <li><strong>Refleksi Diri & Pemaknaan:</strong> Peserta didik mengevaluasi secara jujur sejauh mana pemahaman materi telah dicapai, hambatan utama yang dihadapi, serta manfaat praktis dari materi ini dalam kehidupan sehari-hari.</li>
-        <li><strong>Apresiasi & Penguatan Positif:</strong> Guru memberikan umpan balik konstruktif dan penghargaan atas keaktifan serta kerja sama tim, sehingga menciptakan suasana belajar yang menggembirakan dan berkesan.</li>
-      </ol>
+        <div class="inti-sub-title">Mengaplikasi (berkesadaran, bermakna)</div>
+        <ul class="list-bullet-inti">
+          <li>
+            <strong>Proyek Mini: "Analisis dan Solusi ${topikMateri} di Lingkunganku":</strong>
+            <ul class="list-subbullet-inti">
+              <li>Setiap kelompok memilih satu fenomena nyata dan signifikan terkait <em>${topikMateri}</em> yang terjadi di lingkungan sekitar mereka.</li>
+              <li>Mereka ditugaskan untuk melakukan riset sederhana: observasi langsung, wawancara singkat dengan anggota keluarga/tetangga/tokoh masyarakat/pelaku usaha (jika memungkinkan), dan mencari data pendukung dari sumber terpercaya (misalnya, berita lokal, data statistik sederhana dari kelurahan/desa/BPS, artikel ilmiah, atau internet).</li>
+              <li>
+                Hasil observasi dan analisis disajikan dalam bentuk produk kreatif dan informatif seperti:
+                <ul class="list-square-inti">
+                  <li><strong>Poster Digital/Infografis Interaktif:</strong> Menggunakan aplikasi desain (misalnya Canva, Piktochart) untuk menampilkan data, gambar, dan teks secara menarik, informatif, dan mudah dipahami, mungkin dengan QR code yang mengarah ke sumber data.</li>
+                  <li><strong>Video Dokumenter Singkat (maks. 5 menit):</strong> Dokumentasi fenomena, wawancara singkat, narasi visual, dan analisis.</li>
+                  <li><strong>PowerPoint/Google Slides Interaktif:</strong> Dengan narasi, gambar pendukung, audio/video singkat, dan data yang disajikan secara visual.</li>
+                </ul>
+              </li>
+              <li>
+                Produk harus menjelaskan:
+                <ul class="list-square-inti">
+                  <li>Fenomena yang terjadi (apa, kapan, di mana, bagaimana).</li>
+                  <li>Faktor penyebab dan penghambat.</li>
+                  <li>Dampak positif dan negatif secara rinci.</li>
+                  <li>Saran/solusi konkret dan realistis untuk beradaptasi, memitigasi dampak negatif, dan mengoptimalkan dampak positif dari fenomena <em>${topikMateri}</em> tersebut.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="inti-sub-title">Merefleksi (berkesadaran, bermakna, menggembirakan)</div>
+        <ul class="list-bullet-inti">
+          <li>
+            <strong>Jurnal Reflektif Komprehensif (${tJurnal} menit):</strong> Peserta didik menuliskan dalam jurnal pribadi tentang:
+            <ul class="list-subbullet-inti">
+              <li>Apa saja konsep dan keterampilan baru yang paling menarik dan menantang dari materi <em>${topikMateri}</em> yang telah dipelajari?</li>
+              <li>Pelajaran penting apa yang didapat dari materi ini dan bagaimana relevansinya dengan kehidupan mereka sehari-hari, baik sebagai individu, anggota keluarga, maupun anggota masyarakat?</li>
+              <li>Sikap apa yang akan mereka kembangkan untuk menghadapi perkembangan materi ini di masa depan, baik sebagai individu maupun anggota masyarakat, agar dapat berkontribusi positif?</li>
+              <li>Apa peran yang bisa mereka ambil untuk menjadi agen perubahan yang positif di lingkungan mereka, dimulai dari hal kecil hingga yang lebih besar?</li>
+              <li>Bagaimana proses belajar ini mengubah cara pandang mereka terhadap topik <em>${topikMateri}</em>?</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Diskusi Reflektif Kelas (${tDiskusiRefleksi} menit):</strong> Beberapa peserta didik secara sukarela membagikan refleksi mereka. Guru memimpin diskusi tentang pentingnya memahami <em>${topikMateri}</em>, bagaimana menjadi individu yang adaptif, berpikir kritis, dan berperan aktif dalam menciptakan kondisi yang lebih baik dan berkelanjutan.
+          </li>
+          <li>
+            <strong>Umpan Balik Konstruktif:</strong> Guru memberikan umpan balik terhadap proses pembelajaran secara keseluruhan dan mendorong peserta didik untuk juga memberikan umpan balik tentang pengalaman belajar mereka, apa yang paling membantu, apa yang perlu ditingkatkan, dan saran untuk pembelajaran selanjutnya.
+          </li>
+        </ul>
+      </div>
     `;
 
-    document.getElementById('outPengalamanIntiDetail').innerHTML = kegiatanIntiKompleksHtml;
+    document.getElementById('outPengalamanIntiDetail').innerHTML = kegiatanIntiPersisTemplate;
   }
 
-  // Inisialisasi awal
   window.onload = function() {
     document.getElementById('cpInput').value = "Perubahan Sosial Budaya dan Modernisasi Masyarakat";
-    document.getElementById('alokasiWaktu').value = "2 x 40 Menit (1 Pertemuan)";
+    document.getElementById('jpSelect').value = "4";
     generateRPP(true);
   };
 </script>
